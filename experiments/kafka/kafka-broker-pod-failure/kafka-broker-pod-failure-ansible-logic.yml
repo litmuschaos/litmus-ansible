@@ -8,6 +8,7 @@
     c_interval: "{{ lookup('env','CHAOS_INTERVAL') }}"
     c_force: "{{ lookup('env','FORCE') }}"
     c_lib: "{{ lookup('env','LIB') }}"
+    lib_image: "{{ lookup('env','LIB_IMAGE') }}"
     c_svc_acc: "{{ lookup('env','CHAOS_SERVICE_ACCOUNT') }}"
     kill_count: "{{ lookup('env','KILL_COUNT') }}"
     kafka_instance: "{{ lookup('env','KAFKA_INSTANCE_NAME') }}"
@@ -94,9 +95,10 @@
         ## POST-CHAOS APPLICATION LIVENESS CHECK
         - name: "[Status]: Verify that the Kafka cluster is healthy(post-chaos)"
           include_tasks: "/utils/apps/kafka/kafka_cluster_health.yml"
-          vars:     
-            delay: 2
-            retries: 90
+          vars:    
+            ## kafka-liveness has a one-time run policy, so stopped container indicates failure 
+            delay: 1
+            retries: 60
 
         ## RECORD EVENT FOR POST-CHAOS CHECK
         - name: "[Event]: Generating an Event for PostChaosCheck"
