@@ -16,7 +16,7 @@ spec:
   - name: service-kill
     image: ubuntu:16.04
     command: ["/bin/bash"]
-    args: ["-c", "sleep 10 && echo injecting_docker_crash.. && systemctl stop docker && sleep {{ c_duration }} && systemctl start docker && echo reverted_docker_crash.."]
+    args: ["-c", "sleep 10 && echo 'injecting docker crash..' && systemctl stop docker && sleep {{ c_duration }} && systemctl start docker && echo 'reverted docker crash..'"]
     resources:
       requests:
         cpu: 10m
