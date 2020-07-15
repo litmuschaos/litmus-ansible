@@ -6,6 +6,7 @@
     c_experiment: "kubelet-service-kill"
     c_duration: "{{ lookup('env','TOTAL_CHAOS_DURATION') }}"
     ramp_time: "{{ lookup('env','RAMP_TIME') }}"
+    a_node: "{{ lookup('env','APP_NODE') }}"
     a_ns: "{{ lookup('env','APP_NAMESPACE') }}"
     a_label: "{{ lookup('env','APP_LABEL') }}"
     a_kind: "{{ lookup('env','APP_KIND') }}"
@@ -49,6 +50,8 @@
               - "Namespace    : {{ a_ns }}"
               - "Label        : {{ a_label }}"
               - "Ramp Time    : {{ ramp_time }}"  
+              - "Node name    : {{ a_node }}"
+
 
         ## PRE-CHAOS APPLICATION STATUS CHECK
         - name: "[Status]: Verify that the AUT (Application Under Test) is running (pre-chaos)"

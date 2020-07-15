@@ -44,6 +44,10 @@ spec:
           - name: AUXILIARY_APPINFO
             value: ''
 
+          # provide node name
+          - name: APP_NODE
+            value: ''
+
           ## PROVIDE THE LIB
           ## ONLY LITMUS SUPPORTED
           - name: LIB
