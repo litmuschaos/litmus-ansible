@@ -101,10 +101,6 @@
     msg: "crictl-chaos lib failed, Unable to create as container-killer chaos pod couldn't be scheduled on the {{ app_node }} node"
   when: "pod_running_status is not defined or pod_running_status != 'Running'"
 
-# chaosStartTimeStamp contains the start timestamp
-- name: "[Prepare]: Getting the chaos start timestamp"
-  set_fact: chaosStartTimeStamp="{{lookup('pipe','date \"+%Y-%m-%d %H:%M:%S\"')}}"
-
 - name: "[Wait]: Wait until the container-killer chaos pod is completed"
   shell: >
     kubectl get pods -l name=container-killer-{{ run_id }} --no-headers -n {{ c_ns }}
@@ -116,18 +112,9 @@
   delay: 1
   retries: "{{ c_duration }}"
 
-# chaosCurrentTimeStamp contains the current timestamp
-- name: "[Prepare]: Getting the chaos current timestamp"
-  set_fact: chaosCurrentTimeStamp="{{lookup('pipe','date \"+%Y-%m-%d %H:%M:%S\"')}}"
-
-# chaosDiffTimeStamp contains the difference of current timestamp and start timestamp
-# it will helpful to track the run duration of helper pod
-- set_fact:
-    chaosDiffTimeStamp: "{{ ((chaosCurrentTimeStamp | to_datetime) - (chaosStartTimeStamp | to_datetime)).total_seconds()  }}"
-
 - fail:
     msg: "container-killer chaos pod failed"
-  when: "chaosDiffTimeStamp|int < c_duration|int"
+  when: "result is defined and result.stdout == 'Failed'"  
       
 - block:
 
@@ -146,8 +133,6 @@
     until: "'No resources found' in result.stderr"
     delay: 2
     retries: 90
-
-  when: "chaosDiffTimeStamp|int >= c_duration|int"
 
 - block:
   - debug:
