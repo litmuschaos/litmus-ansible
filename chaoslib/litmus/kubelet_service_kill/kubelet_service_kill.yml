@@ -16,19 +16,25 @@
         set_fact:
           app_pod: "{{ app_pod_name.stdout }}"
 
-      when: "app_pod is not defined or app_pod == ''"
+      - name: "[Prepare]: Identify the application node name"
+        shell: >
+          kubectl get pod {{ app_pod }} -n {{ a_ns }}
+          --no-headers -o custom-columns=:spec.nodeName
+        args:
+          executable: /bin/bash
+        register: app_node
 
-    - name: "[Prepare]: Identify the application node name"
-      shell: >
-        kubectl get pod {{ app_pod }} -n {{ a_ns }}
-        --no-headers -o custom-columns=:spec.nodeName
-      args:
-        executable: /bin/bash
-      register: app_node
+      - name: "[Prepare]: Record the application node name"
+        set_fact: 
+          app_node: "{{ app_node.stdout }}"
+
+      when: "a_node is not defined or a_node == ''"
 
     - name: "[Prepare]: Record the application node name"
       set_fact: 
-        app_node: "{{ app_node.stdout }}"
+        app_node: "{{ a_node }}"
+
+      when: "a_node is defined and a_node != ''" 
 
     - block: 
         - name: "[Prepare:] Generate a run id if not passed from the engine/experiment"
