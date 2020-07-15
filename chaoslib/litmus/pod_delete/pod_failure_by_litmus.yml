@@ -50,10 +50,6 @@
         c_svc_acc: "{{ chaos_service_account.stdout }}"
         pod_delete_image: "{{ lib_image }}"
 
-    # chaosStartTimeStamp contains the start timestamp
-    - name: "[Prepare]: Getting the chaos start timestamp"
-      set_fact: chaosStartTimeStamp="{{lookup('pipe','date \"+%Y-%m-%d %H:%M:%S\"')}}"
-
     - name: "[Prepare]: Create helper pod for pod delete chaos"
       shell: kubectl create -f /tmp/pod-delete-chaos.yml -n {{ c_ns }}
       args:
@@ -75,18 +71,9 @@
       delay: 1
       retries: "{{ c_duration|int + 10 }}"
 
-      # chaosCurrentTimeStamp contains the current timestamp
-    - name: "[Prepare]: Getting the chaos current timestamp"
-      set_fact: chaosCurrentTimeStamp="{{lookup('pipe','date \"+%Y-%m-%d %H:%M:%S\"')}}"
-
-    # chaosDiffTimeStamp contains the difference of current timestamp and start timestamp
-    # it will helpful to track the run duration of helper pod
-    - set_fact:
-        chaosDiffTimeStamp: "{{ ((chaosCurrentTimeStamp | to_datetime) - (chaosStartTimeStamp | to_datetime)).total_seconds()  }}"
-    
     - fail:
         msg: "pod-delete-chaos pod failed"
-      when: "chaosDiffTimeStamp|int < c_duration|int"  
+      when: "result is defined and result.stdout == 'Failed'"  
 
     - block: 
 
@@ -104,8 +91,6 @@
           until: result_status.stdout ==''
           delay: 2
           retries: 90
-
-      when: "chaosDiffTimeStamp|int >= c_duration|int"
 
     - block:
         - debug:
