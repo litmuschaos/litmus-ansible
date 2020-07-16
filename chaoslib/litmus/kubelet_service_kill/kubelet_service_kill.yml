@@ -86,7 +86,7 @@
       args:
         executable: /bin/bash
       register: node_state
-      until: node_state.stdout == 'NotReady'
+      until: "'NotReady' in node_state.stdout"
       delay: 2
       retries: 90
 
@@ -100,7 +100,7 @@
       args:
         executable: /bin/bash
       register: node_state
-      until: node_state.stdout == 'Ready'
+      until: "'Ready' in node_state.stdout and 'NotReady' not in node_state.stdout"
       delay: 2
       retries: 90
  
