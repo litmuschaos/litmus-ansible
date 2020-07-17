@@ -129,7 +129,10 @@ jobs:
           comment-id: "${{ github.event.comment.id }}"
           body: |  
             **Test Result:** All tests are passed
+            **Run ID:** [${{ env.RUN_ID }}](https://github.com/litmuschaos/litmus-ansible/actions/runs/${{ env.RUN_ID }})                        
           reactions: hooray         
+        env: 
+          RUN_ID: ${{ github.run_id }}       
 
       - name: Check for any job failed
         if: ${{ failure() }}
@@ -138,7 +141,10 @@ jobs:
           comment-id: "${{ github.event.comment.id }}"
           body: |
             **Test Failed:** Some tests are failed please check
+            **Run ID:** [${{ env.RUN_ID }}](https://github.com/litmuschaos/litmus-ansible/actions/runs/${{ env.RUN_ID }})            
           reactions: confused
+        env: 
+          RUN_ID: ${{ github.run_id }}
 
       - name: Deleting KinD cluster
         if: ${{ always() }}
@@ -151,7 +157,10 @@ jobs:
           comment-id: "${{ github.event.comment.id }}"
           body: |
             **Test Result:** No test found
-          reactions: eyes 
+            **Run ID:** [${{ env.RUN_ID }}](https://github.com/litmuschaoslitmus-ansible/actions/runs/${{ env.RUN_ID }})
+          reactions: eyes
+        env: 
+          RUN_ID: ${{ github.run_id }}
 
   merge:
     if: contains(github.event.comment.html_url, '/pull/') && startsWith(github.event.comment.body, '/merge')
