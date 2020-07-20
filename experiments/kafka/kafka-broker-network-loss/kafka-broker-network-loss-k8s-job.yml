@@ -40,6 +40,9 @@ spec:
           - name: TARGET_CONTAINER
             value: 'k8skafka'
 
+          - name: TC_IMAGE
+            value: 'gaiadocker/iproute2'
+
           # in percentage   
           - name: NETWORK_PACKET_LOSS_PERCENTAGE
             value: '80'
