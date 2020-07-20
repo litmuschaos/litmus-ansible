@@ -36,7 +36,7 @@ RUN mkdir /etc/ansible/ /ansible && \
 COPY ./chaoslib ./chaoslib/
 COPY ./hack/syntax-check ./hack/*.j2 ./
 COPY ./utils ./utils/
-COPY ./build/plugins/default.py /usr/local/lib/python3/dist-packages/ansible/plugins/callback/default.py
-COPY ./build/utils/display.py /usr/local/lib/python3/dist-packages/ansible/utils/display.py
+COPY ./build/plugins/default.py /usr/local/lib/python3.6/dist-packages/ansible/plugins/callback/default.py
+COPY ./build/utils/display.py /usr/local/lib/python3.6/dist-packages/ansible/utils/display.py
 COPY experiments ./experiments
 COPY ansiblelint ./ansiblelint

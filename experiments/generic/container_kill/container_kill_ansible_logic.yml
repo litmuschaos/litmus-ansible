@@ -18,6 +18,7 @@
     c_ns: "{{ lookup('env','CHAOS_NAMESPACE') }}"
     container_path: "{{ lookup('env','CONTAINER_PATH') }}"
     c_svc_acc: "{{ lookup('env','CHAOS_SERVICE_ACCOUNT') }}"
+    ansible_python_interpreter: "/usr/bin/python3"
 
   tasks:
     - block:

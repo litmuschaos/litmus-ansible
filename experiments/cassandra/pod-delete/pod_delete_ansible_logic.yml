@@ -23,6 +23,7 @@
     liveness_svc_port: "{{ lookup('env','LIVENESS_SVC_PORT') }}"
     cassandra_liveness_image: "{{ lookup('env','CASSANDRA_LIVENESS_IMAGE') }}"
     replication_factor: "{{ lookup('env','KEYSPACE_REPLICATION_FACTOR') }}"
+    ansible_python_interpreter: "/usr/bin/python3"
     
   tasks:
     - block:

@@ -19,6 +19,7 @@
     c_engine: "{{ lookup('env','CHAOSENGINE') }}"
     chaos_pod_name: "{{ lookup('env','POD_NAME') }}"
     c_ns: "{{ lookup('env','CHAOS_NAMESPACE') }}"
+    ansible_python_interpreter: "/usr/bin/python3"
 
   vars_files:
     - /mnt/parameters.yml
