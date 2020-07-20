@@ -33,6 +33,9 @@ spec:
           - name: APP_KIND
             value: ''
 
+          - name: TC_IMAGE
+            value: 'gaiadocker/iproute2'
+
           - name: TARGET_CONTAINER
             value: ''
 
