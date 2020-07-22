@@ -19,6 +19,7 @@
     c_engine: "{{ lookup('env','CHAOSENGINE') }}"
     chaos_pod_name: "{{ lookup('env','POD_NAME') }}"
     c_ns: "{{ lookup('env','CHAOS_NAMESPACE') }}"
+    tc_image: "{{ lookup('env','TC_IMAGE') }}"
 
   vars_files:
     - /mnt/parameters.yml
