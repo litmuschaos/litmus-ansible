@@ -1,0 +1,19 @@
+---
+
+## Following variables requierd to perform action on AWS instance using chaostoolkit, chaostoolkit-aws driver
+LABEL_NAME: "app" # label name
+NAME_SPACE: "default" # name space
+APP_ENDPOINT: "localhost" ## you define ingress or service endpoint
+chaos_prob: "describe_instances" ## chaos probe validation
+chaos_action: "stop_instance"    ## stop_instance,
+chaos_experiment: "aws-ec2-terminate"    ## stop_instance,
+PERCENTAGE: "100" ## percentage pod to be terminated
+REPORT: "false"  ## type of report coming from experiment
+REPORT_ENDPOINT: "none" # kafka or http endpoint which accept the json response body
+AWS_ACCOUNT: "000000000000" # Variable to set for AWS account
+AWS_ROLE: "chaosec2access"  # Variable to set for AWS role
+AWS_REGION: "us-west-2" # Variable to set for AWS region
+AWS_AZ: "us-west-2c" # Variable to set for AWS AZ
+AWS_RESOURCE: "ec2-iks" # Variable to set for AWS RESOURCE
+AWS_SSL: "false" # Variable to set for AWS SSL
+file: aws-ec2-terminate.j2 ## pod-app-kill-count.j2 (To terminate pod on k8)

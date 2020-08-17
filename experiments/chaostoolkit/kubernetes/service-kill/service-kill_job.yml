@@ -2,12 +2,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: k8-pod-delete-
+  generateName: k8-service-kill-
 spec:
   template:
     metadata:
       labels:
-        experiment: k8-pod-delete
+        experiment: k8-service-kill
     spec:
       # Placeholder that is updated by the executor for automated runs
       # Provide appropriate SA (with desired permissions) if executed manually
@@ -19,7 +19,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FILE
-            value: 'pod-app-kill-count.json'
+            value: 'service-app-kill-health.json'
 
           - name: LABEL_NAME
             value: ''
@@ -35,7 +35,7 @@ spec:
           # provide application labels
           - name: PERCENTAGE
             value: '50'
-
+          
           - name: REPORT
             value: 'true'
 
@@ -44,7 +44,7 @@ spec:
           
           - name: TEST_NAMESPACE
             value: 'default'
-        
+
           ## env var that describes the library used to execute the chaos
           ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
           - name: LIB
