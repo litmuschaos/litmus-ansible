@@ -11,7 +11,7 @@ spec:
     spec:
       # Placeholder that is updated by the executor for automated runs
       # Provide appropriate SA (with desired permissions) if executed manually
-      serviceAccountName: %CHAOS_SERVICE_ACCOUNT%
+      serviceAccountName: '%CHAOS_SERVICE_ACCOUNT%'
       restartPolicy: Never
       containers:
       - name: chaostoolkit
@@ -36,14 +36,6 @@ spec:
           - name: PERCENTAGE
             value: '50'
 
-          - name: CHAOSTOOLKIT_IN_POD
-            value: "true"
-
-          ## env var that describes the library used to execute the chaos
-          ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
-          - name: LIB
-            value: ''
-
           # Variable to set for custom report upload
           - name: REPORT
             value: 'true'
@@ -51,6 +43,17 @@ spec:
           # Variable to set for report upload endpoint
           - name: REPORT_ENDPOINT
             value: 'none'
+          
+          # Variable to set for chaos result report from which namespace
+          - name: TEST_NAMESPACE
+            value: 'default'
+
+          ## env var that describes the library used to execute the chaos
+          ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
+          - name: LIB
+            value: ''
+
+
 
           - name: CHAOS_SERVICE_ACCOUNT
             valueFrom:

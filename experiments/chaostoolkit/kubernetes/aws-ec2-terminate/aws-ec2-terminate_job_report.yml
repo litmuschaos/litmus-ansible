@@ -2,12 +2,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: k8-pod-delete-
+  generateName: k8-aws-ec2-terminate-
 spec:
   template:
     metadata:
       labels:
-        experiment: k8-pod-delete
+        experiment: aws-ec2-terminate
     spec:
       # Placeholder that is updated by the executor for automated runs
       # Provide appropriate SA (with desired permissions) if executed manually
@@ -19,7 +19,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FILE
-            value: 'pod-app-kill-count.json'
+            value: 'ec2-delete.json'
 
           - name: LABEL_NAME
             value: ''
@@ -44,7 +44,25 @@ spec:
           
           - name: TEST_NAMESPACE
             value: 'default'
-        
+
+          - name: AWS_ROLE
+            value: 'chaosec2access'
+
+          - name: AWS_ACCOUNT
+            value: '000000000000'
+
+          - name: AWS_REGION
+            value: 'us-west-2'
+
+          - name: AWS_AZ
+            value: 'us-west-2c'
+
+          - name: AWS_RESOURCE
+            value: 'ec2-iks'  
+
+          - name: AWS_SSL
+            value: 'false'
+      
           ## env var that describes the library used to execute the chaos
           ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
           - name: LIB

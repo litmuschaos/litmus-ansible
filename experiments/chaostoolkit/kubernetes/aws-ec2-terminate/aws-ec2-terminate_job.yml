@@ -2,12 +2,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  generateName: k8-pod-delete-
+  generateName: k8-aws-ec2-terminate-
 spec:
   template:
     metadata:
       labels:
-        experiment: k8-pod-delete
+        experiment: aws-ec2-terminate
     spec:
       # Placeholder that is updated by the executor for automated runs
       # Provide appropriate SA (with desired permissions) if executed manually
@@ -19,8 +19,9 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FILE
-            value: 'pod-app-kill-count.json'
-
+            value: 'ec2-delete.json'
+          
+          # provide application label name
           - name: LABEL_NAME
             value: ''
 
@@ -32,19 +33,46 @@ spec:
           - name: APP_ENDPOINT
             value: 'localhost'
 
-          # provide application labels
+          # Period to wait before injection of chaos in sec
           - name: PERCENTAGE
             value: '50'
 
+          # Variable to set for custom report upload
           - name: REPORT
-            value: 'true'
+            value: 'false'
 
+          # Variable to set for report upload endpoint
           - name: REPORT_ENDPOINT
             value: 'none'
-          
+
+          # Variable to set for AWS account
+          - name: AWS_ACCOUNT
+            value: '000000000000'
+
+          # Variable to set for AWS role, Make sure you have created this role and have give access
+          - name: AWS_ROLE
+            value: 'chaosec2access'
+
+          # Variable to set for AWS region
+          - name: AWS_REGION
+            value: 'us-west-2'
+
+          # Variable to set for AWS AZ
+          - name: AWS_AZ
+            value: 'us-west-2c'
+
+          # Variable to set for AWS RESOURCE
+          - name: AWS_RESOURCE
+            value: 'ec2-iks'
+
+          # Variable to set for AWS SSL
+          - name: AWS_SSL
+            value: 'false'
+
+          # Variable which indicates where the test results CRs will be persisted
           - name: TEST_NAMESPACE
             value: 'default'
-        
+      
           ## env var that describes the library used to execute the chaos
           ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
           - name: LIB

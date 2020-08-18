@@ -19,7 +19,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FILE
-            value: 'pod-app-kill-count.json'
+            value: 'service-app-kill-health.json'
 
           - name: LABEL_NAME
             value: ''
@@ -36,19 +36,25 @@ spec:
           - name: PERCENTAGE
             value: '50'
 
-          - name: REPORT
-            value: 'true'
+          - name: CHAOSTOOLKIT_IN_POD
+            value: "true"
 
-          - name: REPORT_ENDPOINT
-            value: 'none'
-          
-          - name: TEST_NAMESPACE
-            value: 'default'
-        
           ## env var that describes the library used to execute the chaos
           ## default: litmus. Supported values: litmus, powerfulseal, chaostoolkit
           - name: LIB
             value: ''
+
+          # Variable to set for custom report upload
+          - name: REPORT
+            value: 'true'
+
+          # Variable to set for report upload endpoint
+          - name: REPORT_ENDPOINT
+            value: 'none'
+
+          # Variable to set for chaos result report from which namespace
+          - name: TEST_NAMESPACE
+            value: 'default'
 
           - name: CHAOS_SERVICE_ACCOUNT
             valueFrom:
