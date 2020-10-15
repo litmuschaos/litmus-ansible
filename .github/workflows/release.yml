@@ -3,10 +3,19 @@
 # Please provide the release version and release tag in github secrets for the upcoming release.
 name: AutoRelease
 
-# Executes a job at 10:15am on the 15th day of every month
 on:
-  schedule:
-    - cron:  '0 15 10 15 * *'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tag:
+        description: 'Release tag'
+        required: true
+      branch:
+        description: 'Release branch name'
+        required: true
 
 jobs:
   release:
@@ -21,12 +30,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          branch: '${{ secrets.RELEASE_BRANCH }}'
+          branch: '${{ github.event.inputs.branch }}'
 
       # Provide release tag from the github secret ex. 1.9.0
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ secrets.RELEASE_TAG }}"
+          automatic_release_tag: "${{ github.event.inputs.tag }}"
           prerelease: false
-          title: "${{ secrets.RELEASE_TAG }}"
+          title: "${{ github.event.inputs.tag }}"
