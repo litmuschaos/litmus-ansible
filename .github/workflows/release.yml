@@ -11,7 +11,7 @@ on:
         required: true
         default: 'warning'
       tag:
-        description: 'Releae tag'
+        description: 'Release tag'
         required: true
       branch:
         description: 'Release branch name'
@@ -38,4 +38,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "${{ github.event.inputs.tag }}"
           prerelease: false
-          title: "${{ github.event.inputs.branch }}"
+          title: "${{ github.event.inputs.tag }}"
