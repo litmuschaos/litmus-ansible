@@ -24,6 +24,28 @@
         stg_engine: "{{ openebs_stg_engine.stdout }}"
   when: stg_prov == "openebs.io/provisioner-iscsi"
 
+- block:
+    - name: "[PreReq]: Derive PV name from PVC to query storage engine type (openebs)"
+      shell: >
+        kubectl get pvc {{ pvc }} -n {{ namespace }}
+        --no-headers -o custom-columns=:spec.volumeName
+      args:
+        executable: /bin/bash
+      register: pv
+
+    - name: "[PreReq]: Check for presence & value of cas type annotation"
+      shell: >
+        kubectl get pv {{ pv.stdout }} --no-headers
+        -o jsonpath="{.spec.csi.volumeAttributes.openebs\\.io/cas-type}"
+      args:
+        executable: /bin/bash
+      register: openebs_stg_engine
+
+    - name: "[PreReq]: Record the storage engine name"
+      set_fact:
+        stg_engine: "{{ openebs_stg_engine.stdout }}"
+  when: stg_prov == "cstor.csi.openebs.io"
+
 - name: "[PreReq]: Identify the chaos util to be invoked"
   template:
     src: chaosutil.j2
