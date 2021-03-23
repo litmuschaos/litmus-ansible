@@ -10,9 +10,10 @@ RUN apt-get clean && \
 
 RUN touch /mnt/parameters.yml
 
-#Installing ansible and dependencies for k8s module
-RUN pip3 install ansible==2.7.3 openshift jmespath boto boto3 ansible-lint
 
+#Installing ansible and dependencies for k8s module
+RUN pip3 install cryptography==3.3.1 ansible==2.9 openshift jmespath boto boto3 ansible-lint "ansible==2.9"
+RUN ansible-galaxy collection install community.kubernetes
 #Installing gcloud 
 RUN curl -sSL https://sdk.cloud.google.com | bash
 ENV PATH $PATH:/root/google-cloud-sdk/bin
