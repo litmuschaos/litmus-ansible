@@ -6,14 +6,13 @@ LABEL maintainer="LitmusChaos"
 RUN apt-get clean && \
     apt-get update --fix-missing || true && \
     apt-get install -y --no-install-recommends python3-minimal python3-pip netcat iproute2 jq sshpass \
-    curl openssh-client python3-setuptools && rm -rf /var/lib/apt/lists/* 
+    curl openssh-client python3-setuptools && pip3 install --upgrade pip && rm -rf /var/lib/apt/lists/* 
 
 RUN touch /mnt/parameters.yml
 
 
 #Installing ansible and dependencies for k8s module
-RUN pip3 install --upgrade pip
-RUN pip3 install ansible==2.9 openshift jmespath boto boto3 ansible-lint "ansible==2.9"
+RUN pip3 install cryptography==3.3.1 ansible==2.9 openshift jmespath boto boto3 ansible-lint "ansible==2.9"
 RUN ansible-galaxy collection install community.kubernetes
 #Installing gcloud 
 RUN curl -sSL https://sdk.cloud.google.com | bash
