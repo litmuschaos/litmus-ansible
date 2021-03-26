@@ -2,19 +2,15 @@ dist: trusty
 install: true
 language: go
 go:
-  - 1.11.2
+  - 1.14
 env:
   global:
     - GOARCH=amd64
-    - TRIVYARCH="64bit"
     
 before_install:
   - sleep 15
-  - sudo apt-get install curl
-  - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
-  - echo ${VERSION} 
-  - wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-${TRIVYARCH}.tar.gz
-  - tar zxvf trivy_${VERSION}_Linux-${TRIVYARCH}.tar.gz
+  - wget https://github.com/aquasecurity/trivy/releases/download/v0.11.0/trivy_0.11.0_Linux-64bit.tar.gz
+  - tar zxvf trivy_0.11.0_Linux-64bit.tar.gz
 
 script:
   - make deps
