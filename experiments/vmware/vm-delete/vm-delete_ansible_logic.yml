@@ -1,0 +1,131 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    a_kind: "{{ lookup('env','APP_KIND') }}"
+    a_label: "{{ lookup('env','APP_LABEL') }}"
+    a_ns: "{{ lookup('env','APP_NAMESPACE') }}"
+    auxiliary_appinfo: "{{ lookup('env','AUXILIARY_APPINFO') }}"
+    c_duration: "{{ lookup('env','TOTAL_CHAOS_DURATION') }}"
+    c_interval: "{{ lookup('env','CHAOS_INTERVAL') }}"
+    c_experiment: "vm-delete" 
+    ramp_time: "{{ lookup('env','RAMP_TIME') }}"
+    chaos_pod_name: "{{ lookup('env','POD_NAME') }}"
+    c_ns: "{{ lookup('env','CHAOS_NAMESPACE') }}"
+    chaos_uid: "{{ lookup('env','CHAOS_UID') }}"
+    c_engine: "{{ lookup('env','CHAOSENGINE') }}"
+    c_lib: "{{ lookup('env','LIB') }}"
+    vm_moid1: "{{ lookup('env','APP_VM_MOID') }}"
+    ansible_python_interpreter: "/usr/bin/python3"
+    vcenter_server: "{{ lookup('env','VCENTERSERVER') }}"
+    vcenter_user: "{{ lookup('env','VCENTERUSER') }}"
+    vcenter_pass: "{{ lookup('env','VCENTERPASS') }}"  
+
+  tasks:
+    - block:
+            
+        ## DETERMINE THE CHAOSLIB TASKFILES TO BE USED
+        - include: vm_delete_ansible_prerequisites.yml
+
+        - name: "[PreReq]: Including the chaos util for the {{ c_experiment }} experiment"
+          include_vars:
+            file: /tmp/chaosutil.yml
+      
+         ## GENERATE EXP RESULT NAME
+        - name: "[PreReq]: Constructing the chaos result name"
+          set_fact:
+            c_result: "{{ c_engine }}-{{ c_experiment }}"
+          when: "c_engine is defined and c_engine != ''"
+
+        ## RECORD START-OF-EXPERIMENT IN LITMUSCHAOS RESULT CR
+        - name: "[PreReq]: Updating the chaos result of {{ c_experiment }} experiment (SOT)"
+          include_tasks: /utils/runtime/update_chaos_result_resource.yml
+          vars:
+            status: 'SOT'
+            namespace: "{{ c_ns }}"
+
+        ## DISPLAY APP INFORMATION 
+        - name: "[Info]: Display the application information passed via the test job"
+          debug: 
+            msg: 
+              - "The application info is as follows:"
+              - "VM_MOID        : {{ vm_moid1 }}"
+              - "Ramp Time    : {{ ramp_time }}"  
+
+        ## GET SESSION IF FOR VMWARE API AUTHENTICATION
+        - name: "[Prereq]: Get the session for vmware api authentication"
+          include_tasks: "/utils/vmware/login.yml"
+
+        ## PRE-CHAOS APPLICATION STATUS CHECK
+        - name: "[Status]: Verify that the AUT (Application Under Test) is running (pre-chaos)"
+          include_tasks: "/utils/vmware/get_vm_status.yml"
+          vars:
+            vm: "{{ vm_moid1 }}"
+            delay: 2
+            retries: 10
+
+
+        ## RECORD EVENT FOR PRE-CHAOS CHECK
+        - name: "[Event]: Generating an Event for PreChaosCheck"
+          include_tasks: /utils/common/generate-kubernetes-chaos-events.yml
+          vars:
+            stage: "PreChaosCheck"
+            exp_pod_name: "{{ chaos_pod_name }}"
+            engine_ns: "{{ c_ns }}"
+            message: "AUT is Running successfully"
+          when: "c_engine is defined and c_engine != ''"
+
+
+         ## READY TO DELETE THE VM
+        - name: "[Prepare]: Including the vmware vm-delete lib"
+          include_tasks: "{{ c_util }}"
+          vars:
+            app_ns: "{{ a_ns }}"
+            app_label: "{{ a_label }}"
+
+
+        ## POST-CHAOS APPLICATION STATUS CHECK
+        - name: "[Status]: Verify that the AUT (Application Under Test) is running (post-chaos)"
+          include_tasks: "/utils/vmware/get_vm_status.yml"
+          vars:
+            vm: "{{ vm_moid1 }}"
+            delay: 2
+            retries: 5
+
+        ## RECORD EVENT FOR POST-CHAOS CHECK
+        - name: "[Event]: Generating an Event for PostChaosCheck"
+          include_tasks: /utils/common/generate-kubernetes-chaos-events.yml
+          vars:
+            stage: "PostChaosCheck"
+            exp_pod_name: "{{ chaos_pod_name }}"
+            engine_ns: "{{ c_ns }}"
+            message: "AUT is Running successfully"
+          when: "c_engine is defined and c_engine != ''"
+        
+        - set_fact:
+            flag: "Pass"
+
+        - name: "[Result]: Getting the final result of {{ c_experiment }} experiment"
+          debug:
+            msg: " experiment has been {{ flag }}ed"
+
+      rescue: 
+        - set_fact: 
+            flag: "Fail"
+
+        - name: "[Result]: Getting the final result of {{ c_experiment }} experiment"
+          debug:
+            msg: " experiment has been {{ flag }}ed"
+
+      always: 
+
+        ## Getting failure step from experiment-pod
+        - include_tasks: /utils/runtime/getting_failure_step.yml  
+ 
+        ## RECORD END-OF-TEST IN LITMUSCHAOS RESULT CR
+        - name: "[The End]: Updating the chaos result of {{ c_experiment }} experiment (EOT)"
+          include_tasks: /utils/runtime/update_chaos_result_resource.yml
+          vars:
+            status: 'EOT'
+            namespace: "{{ c_ns }}"

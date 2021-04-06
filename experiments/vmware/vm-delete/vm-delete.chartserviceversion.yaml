@@ -1,0 +1,23 @@
+apiVersion: litmuchaos.io/v1alpha1
+kind: ChartServiceVersion
+metadata:
+  name: vm-delete 
+  version: 0.1.0
+  annotations:
+    categories: vmware
+    repository: https://github.com/litmuschaos/litmus-ansible/tree/master/vmware/vm-delete
+    support: https://kubernetes.slack.com/messages/CNXNB0ZTN
+spec:
+  displayName: vm-delete 
+  categoryDescription: >
+    stops a vm for a certain chaos duration 
+  keywords: ['pods', 'kubernetes', 'vmware','vm-delete', 'nginx'] 
+  maturity: alpha 
+  minKubeVersion: 1.12.0 
+  provider: {'name': 'Wipro'}
+  maintainers: ['golkonda.joyneer@wipro.com'] 
+  contributors: ['golkonda.joyneer@wipro.com'] 
+  links: ['https://docs.litmuschaos.io/docs/getstarted/'] 
+  icon:
+    - url: 
+      mediatype: ""
