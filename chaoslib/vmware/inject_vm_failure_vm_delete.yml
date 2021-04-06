@@ -1,19 +1,5 @@
 ---
 - block:
-    - name: "[Prepare]: Deriving the chaos iterations"
-      set_fact:
-        c_iterations: "{{ (c_duration|int / c_interval|int)|int }}"
-      when: c_iterations is not defined and (c_interval is defined and c_interval|int !=0)
-
-    - name: "[Prepare]: Deriving the chaos interval"
-      set_fact:
-        c_interval: "{{ (c_duration|int / c_iterations|int)|int }}"
-      when: c_interval is not defined and c_iterations is defined
-
-    - name: "[Prepare]: Setting the min chaos count to one"
-      set_fact:
-        c_iterations: 1
-      when: "c_iterations is not defined or c_iterations == '0'"
 
     - block:
 
