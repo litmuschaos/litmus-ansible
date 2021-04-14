@@ -1,0 +1,10 @@
+---
+  - name: Login into vCenter and get cookies
+    uri:
+      url: https://{{ vcenter_server }}/rest/com/vmware/cis/session
+      force_basic_auth: yes
+      validate_certs: no
+      method: POST
+      user: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+    register: login
