@@ -1,0 +1,15 @@
+---
+  - name: Get the status of the vm
+    uri:
+      url: https://{{ vcenter_server }}/rest/vcenter/vm/{{ vm }}/power/
+      force_basic_auth: yes
+      validate_certs: no
+      headers:
+        Cookie: "{{ login.set_cookie }}"
+    register: result
+    until: "'{{ result.json.value.state  }}' ==  'POWERED_ON'"
+    delay: "{{ delay }}"
+    retries: "{{ retries }}"
+
+  - debug:
+      msg: " {{ vm }} is POWERED_ON"
