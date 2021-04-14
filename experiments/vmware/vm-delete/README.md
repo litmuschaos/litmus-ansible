@@ -1,13 +1,5 @@
 ## Experiment Metadata
 
----
-id:vm-delete
-title: VM Delete Experiment Details
-sidebar_label: VM Delete
-------
-
-## Experiment Metadata
-
 <table>
   <tr>
     <th> Type </th>
@@ -142,10 +134,10 @@ subjects:
     <td> Defaults to 30s </td>
   </tr>
   <tr>
-    <th> VCENTERSERVER </th>
-    <th> IP Address of the vcenter </th>
-    <th> Required </th>
-    <th> Should be specified in secret created </th>
+    <td> VCENTERSERVER </td>
+    <td> IP Address of the vcenter </td>
+    <td> Required </td>
+    <td> Should be specified in secret created </td>
   </tr>
   <tr> 
     <td> VCENTERUSER </td>
