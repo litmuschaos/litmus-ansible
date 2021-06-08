@@ -11,7 +11,7 @@ spec:
     spec:
       # Placeholder that is updated by the executor for automated runs
       # Provide appropriate SA (with desired permissions) if executed manually
-      serviceAccountName: %CHAOS_SERVICE_ACCOUNT%
+      servceAcountName: litmus-runner
       restartPolicy: Never
       containers:
       - name: ansibletest
@@ -23,15 +23,15 @@ spec:
 
           # provide application namespace
           - name: APP_NAMESPACE
-            value: ''
+            value: 'default'
 
           # provide application labels
           - name: APP_LABEL
-            value: ''
+            value: 'app=nginx'
 
            # provide application kind
           - name: APP_KIND
-            value: ''
+            value: 'Deployment'
 
           - name: TOTAL_CHAOS_DURATION
             value: '15'
@@ -41,7 +41,7 @@ spec:
 
           # provide the kill count
           - name: KILL_COUNT
-            value: ''
+            value: '3'
 
             ## Period to wait before injection of chaos  
           - name: RAMP_TIME
@@ -60,7 +60,7 @@ spec:
 
           # provide the chaos namespace
           - name: CHAOS_NAMESPACE
-            value: ''
+            value: 'default'
 
           - name: POD_NAME
             valueFrom:
@@ -73,4 +73,4 @@ spec:
                 fieldPath: spec.serviceAccountName
 
         command: ["/bin/bash"]
-        args: ["-c", "ansible-playbook ./experiments/generic/pod_delete/pod_delete_ansible_logic.yml -i /etc/ansible/hosts -vv; exit 0"]
+        args: ["-c", "sleep 50000"]

@@ -54,21 +54,21 @@
 
       # Gcloud authentication
       - name: "[Authentication]: Gcloud authentication"
-        include_tasks: "/utils/cloud/gcp/gcloud_configure.yml"
+        include_tasks: "/utils/common/cloud/gcp/gcloud_configure.yml"
         when: "cloud_platform == 'GKE'"
 
       # AWS authentication
       - name: "[Authentication]: Gcloud authentication"
-        include_tasks: "/utils/cloud/aws/aws_configure.yml"
+        include_tasks: "/utils/common/cloud/aws/aws_configure.yml"
         when: "cloud_platform == 'AWS'"
         
       ## PRE-CHAOS DISK STATUS CHECK
       - name: "[Status]: Verify that the disk is connected to node (pre-chaos)"
-        include_tasks: "/utils/cloud/gcp/status_disk.yml"
+        include_tasks: "/utils/common/cloud/gcp/status_disk.yml"
         when: "cloud_platform == 'GKE'"
 
       - name: "[Status]: Verify that the disk is connected to node (pre-chaos)"
-        include_tasks: "/utils/cloud/aws/status_disk.yml"
+        include_tasks: "/utils/common/cloud/aws/status_disk.yml"
         when: "cloud_platform == 'AWS'"
 
       # Checking disk is attached to node
@@ -144,11 +144,11 @@
 
       # POST CHAOS CHECKS
       - name: "[Status]: Verify that the disk is connected to node (post-chaos)"
-        include_tasks: "/utils/cloud/gcp/status_disk.yml"
+        include_tasks: "/utils/common/cloud/gcp/status_disk.yml"
         when: "cloud_platform == 'GKE'"
       
       - name: "[Status]: Verify that the disk is connected to node (post-chaos)"
-        include_tasks: "/utils/cloud/aws/status_disk.yml"
+        include_tasks: "/utils/common/cloud/aws/status_disk.yml"
         when: "cloud_platform == 'AWS'"
         
       # Checking disk is attached to node
@@ -237,3 +237,4 @@
           vars:
             status: 'EOT'
             namespace: "{{ c_ns }}"
+            

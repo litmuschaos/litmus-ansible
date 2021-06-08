@@ -21,9 +21,10 @@ spec:
   instance: {{ instance_id }}
   {% endif %}
 status:
-  experimentstatus: 
+  experimentStatus: 
     phase: {{ phase }}  
     verdict: {{ verdict }}
+    probeSuccessPercentage: "{{ probeSuccessPercentage | string }}"
     {% if failStep is defined %}
     failStep: "{{ failStep }}"
     {% endif %}
