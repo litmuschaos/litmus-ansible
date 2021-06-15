@@ -3,7 +3,7 @@ name: litmus-ansible-ci
 on:
   pull_request:
     branches:
-      - master    
+      - v1.13.x    
   push:
     branches:
       - master
