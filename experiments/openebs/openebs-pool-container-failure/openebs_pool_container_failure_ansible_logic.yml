@@ -110,7 +110,8 @@
 
         ## STORAGE FAULT INJECTION 
         - include: "{{ chaos_util_path }}"
-          error_messages: "{{ pool_debug_msg }}"
+          vars:
+            error_messages: "{{ pool_debug_msg }}"
 
         ## POST-CHAOS APPLICATION STATUS CHECK
         - name: "[Status]: Verify that the AUT (Application Under Test) is running (post-chaos)"
