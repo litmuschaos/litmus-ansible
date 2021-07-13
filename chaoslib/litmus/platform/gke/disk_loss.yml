@@ -26,7 +26,7 @@
     timeout: "{{ c_duration }}"
 
 - name: "[Status]: Verify that the disk is connected to node (post)"
-  include_tasks: "/utils/cloud/gcp/status_disk.yml"
+  include_tasks: "/utils/common/cloud/gcp/status_disk.yml"
   
 - block:
   - name: "[Recover]: If the disk is not attached, it will attach manually"
