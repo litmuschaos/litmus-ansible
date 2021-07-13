@@ -29,12 +29,13 @@
        phase: "Completed" 
        verdict: "{{ flag }}"
        instance_id: "{{ lookup('env','INSTANCE_ID') }}"
-
+ 
    - name: "[The END]: Apply the chaos result CR for {{ c_experiment }} experiment"
      shell: kubectl apply -f /tmp/chaos-result.yml -n {{ namespace }}
      args:
        executable: /bin/bash
      register: cr_status
      failed_when: "cr_status.rc != 0"
+   
 
   when: status == "EOT"
