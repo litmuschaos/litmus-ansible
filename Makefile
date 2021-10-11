@@ -73,16 +73,6 @@ ansible-syntax-check:
 	done; \
 	exit $${rc_sum}
 
-.PHONY: security-checks
-security-checks: trivy-security-check
-
-trivy-security-check:
-	@echo "------------------"
-	@echo "--> Trivy Security Check"
-	@echo "------------------"
-	./trivy --exit-code 0 --severity HIGH --no-progress $(DOCKER_REPO)/$(DOCKER_IMAGE):$(DOCKER_TAG)
-	./trivy --exit-code 1 --severity CRITICAL --no-progress $(DOCKER_REPO)/$(DOCKER_IMAGE):$(DOCKER_TAG)
-
 .PHONY: lint-checks
 lint-checks: ansible-lint-check
 
