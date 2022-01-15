@@ -11,7 +11,7 @@ RUN touch /mnt/parameters.yml
 
 
 #Installing ansible and dependencies for k8s module
-RUN pip3 install cryptography==3.3.1 ansible==2.10 ansible-base==2.10.14 openshift jmespath boto boto3 
+RUN pip3 install cryptography==3.3.2 ansible==4.2.0 ansible-base==2.10.14 openshift jmespath boto boto3 
 RUN pip3 install ansible-lint==4.3.7
 RUN ansible-galaxy collection install community.kubernetes
 
@@ -21,7 +21,7 @@ ENV PATH $PATH:/root/google-cloud-sdk/bin
 RUN gcloud --version
 
 #Installing Kubectl
-ENV KUBE_LATEST_VERSION="v1.18.0"
+ENV KUBE_LATEST_VERSION="v1.22.2"
 RUN curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_LATEST_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl && \
     chmod +x /usr/local/bin/kubectl
     
