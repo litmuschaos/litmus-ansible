@@ -11,7 +11,7 @@ RUN touch /mnt/parameters.yml
 
 
 #Installing ansible and dependencies for k8s module
-RUN pip3 install cryptography==3.3.2 ansible==2.10 ansible-base==4.2.0 openshift jmespath boto boto3 
+RUN pip3 install cryptography==3.3.2 ansible==4.2.0 ansible-base==2.10.14 openshift jmespath boto boto3 
 RUN pip3 install ansible-lint==4.3.7
 RUN ansible-galaxy collection install community.kubernetes
 
