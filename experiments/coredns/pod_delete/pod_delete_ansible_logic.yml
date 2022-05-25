@@ -19,6 +19,7 @@
     c_ns: "{{ lookup('env','CHAOS_NAMESPACE') }}"
     ansible_python_interpreter: "/usr/bin/python3"
     probeSuccessPercentage: 0
+
   tasks:
     - block:
 
@@ -128,10 +129,12 @@
 
         - set_fact:
             flag: "Pass"
+            probeSuccessPercentage: 100
 
       rescue:
         - set_fact: 
             flag: "Fail"
+            probeSuccessPercentage: 0
 
         - block:
 
