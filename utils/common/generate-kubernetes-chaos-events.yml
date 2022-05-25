@@ -6,7 +6,7 @@
     ts: "{{ date_from_linux_shell.stdout.split('+')[0] + 'Z'}}"
     
 - name: "[Event]: Creating a {{ stage }} event in the chaosengine"
-  community.kubernetes.k8s:
+  kubernetes.core.k8s:
     state: present
     definition:
       apiVersion: v1
