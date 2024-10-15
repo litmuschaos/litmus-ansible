@@ -1,35 +1,37 @@
 ---
-name: release
-
+name: Push
 on:
-  create:
-    tags:
+  push:
+    branches:
+      - master
+    tags-ignore:
       - '**'
 
 env:
   DOCKER_REPO: litmuschaos
   DOCKER_IMAGE: ansible-runner
-
-defaults:
-  run:
-    shell: bash
+  DOCKER_TAG: ci
 
 jobs:
-  push:
+  pre-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set Tag
-        run: |
-          TAG="${GITHUB_REF#refs/*/}"
-          echo "TAG=${TAG}" >> $GITHUB_ENV
-          echo "RELEASE_TAG=${TAG}" >> $GITHUB_ENV
+      - name: checking dependencies are installed
+        run: make deps
 
-      - name: Print Tag info
-        run: |
-          echo "RELEASE TAG: ${RELEASE_TAG}"
-          echo "${RELEASE_TAG}" > ${{ github.workspace }}/tag.txt
+      - name: Running ansible syntax-checks
+        run: make syntax-checks
+
+      - name: Running ansible lint-checks
+        run: make lint-checks
+
+  push:
+    needs: pre-checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -50,10 +52,8 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v2
-        env:
-          RELEASE_TAG: ${{ env.RELEASE_TAG }}
         with:
           push: true
           file: build/ansible-runner/Dockerfile
           platforms: linux/amd64
-          tags: litmuschaos/ansible-runner:${{ env.RELEASE_TAG }},litmuschaos/ansible-runner:latest
+          tags: litmuschaos/ansible-runner:ci
